@@ -15,10 +15,10 @@ mkdir -p "$DASHBOARD_DIR/logs"
 
   # Git add + commit + push (only if changed)
   cd "$DASHBOARD_DIR"
-  if git diff --quiet data/status.json 2>/dev/null; then
+  if git diff --quiet public/data/status.json 2>/dev/null; then
     echo "No changes to push"
   else
-    git add data/status.json
+    git add public/data/status.json
     git commit -m "auto: update status $(date -u +%H:%M)" --no-gpg-sign -q
     git push -q origin main 2>&1
     echo "Pushed to GitHub"

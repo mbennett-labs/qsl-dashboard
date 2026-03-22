@@ -4,7 +4,7 @@
 set -euo pipefail
 
 DASHBOARD_DIR="$HOME/qsl-dashboard"
-OUTPUT="$DASHBOARD_DIR/data/status.json"
+OUTPUT="$DASHBOARD_DIR/public/data/status.json"
 HOSTINGER="69.62.69.140"
 HOSTINGER_TIMEOUT=10
 COLLECT_START=$(date +%s)

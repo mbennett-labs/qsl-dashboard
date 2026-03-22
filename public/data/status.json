@@ -1,0 +1,117 @@
+{
+  "timestamp": "2026-03-22T21:43:24Z",
+  "cabinet": [
+    {
+      "name": "CrawDaddy",
+      "role": "CSO \u2014 Gen 1",
+      "status": "stopped",
+      "host": "EC2",
+      "ram": "\u2014",
+      "uptime": "\u2014",
+      "note": "ACP seller on Virtuals"
+    },
+    {
+      "name": "Bastion",
+      "role": "CIO \u2014 Gen 2",
+      "status": "running",
+      "host": "EC2",
+      "ram": "205M",
+      "uptime": "02:13:18",
+      "note": "Conway automaton, ERC-8004 #30013"
+    },
+    {
+      "name": "ResearchBot",
+      "role": "CDO \u2014 Intelligence",
+      "status": "running",
+      "host": "EC2",
+      "ram": "36M",
+      "uptime": "02:00:11",
+      "note": "Feed aggregation + daily digest"
+    },
+    {
+      "name": "SN61 Miner",
+      "role": "Revenue \u2014 BitTensor",
+      "status": "running",
+      "host": "Hostinger",
+      "ram": "168.2MiB",
+      "uptime": "\u2014",
+      "note": "UID 57 Finney mainnet"
+    }
+  ],
+  "treasury": {
+    "conway_credits": "$4.90",
+    "conway_tier": "low_compute",
+    "crawdaddy_address": "0x25B50fEd69175e474F9702C0613413F8323809a8",
+    "crawdaddy_balance": "\u2014",
+    "bastion_address": "0xEEF60d4E36EdcfE75b07ffA8a492212660452DD4",
+    "bastion_balance": "\u2014"
+  },
+  "intel_feed": [],
+  "milestones": [
+    {
+      "text": "ERC-8004 Agent ID 30013 registered on Base",
+      "date": "2026-03-12",
+      "done": true
+    },
+    {
+      "text": "CrawDaddy ACP seller deployed",
+      "date": "2026-03-12",
+      "done": true
+    },
+    {
+      "text": "Bastion Conway automaton first boot",
+      "date": "2026-03-12",
+      "done": true
+    },
+    {
+      "text": "SN61 miner migrated to Hostinger",
+      "date": "2026-03-21",
+      "done": true
+    },
+    {
+      "text": "Bastion OOM fix + circuit breaker",
+      "date": "2026-03-21",
+      "done": true
+    },
+    {
+      "text": "ResearchBot Phase 1 deployed",
+      "date": "2026-03-22",
+      "done": true
+    },
+    {
+      "text": "CrawDaddy accuracy corpus built",
+      "date": "2026-03-22",
+      "done": true
+    },
+    {
+      "text": "Swarm Dashboard live",
+      "date": "2026-03-22",
+      "done": true
+    },
+    {
+      "text": "CrawDaddy v2 genesis wiring",
+      "date": "",
+      "done": false
+    },
+    {
+      "text": "Bastion first autonomous scan",
+      "date": "",
+      "done": false
+    }
+  ],
+  "health": {
+    "ec2_cpu": "14.3%",
+    "ec2_ram": "1313M / 1907M (69%)",
+    "ec2_disk": "12G / 19G (65%)",
+    "ec2_status": "running",
+    "hostinger_status": "reachable",
+    "hostinger_reachable": true,
+    "miner_status": "running",
+    "miner_running": true,
+    "seller_watchdog": "[2026-03-22 21:30:01] Seller restart FAILED",
+    "seller_watchdog_ok": true,
+    "bastion_watchdog": "[2026-03-22 21:30:01] Bastion OK",
+    "bastion_watchdog_ok": true,
+    "collect_duration": "4s"
+  }
+}
