@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-03-22T21:45:06Z",
+  "timestamp": "2026-03-22T21:50:05Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
       "role": "CSO \u2014 Gen 1",
-      "status": "running",
+      "status": "stopped",
       "host": "EC2",
       "ram": "\u2014",
-      "uptime": "",
+      "uptime": "\u2014",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -15,8 +15,8 @@
       "role": "CIO \u2014 Gen 2",
       "status": "running",
       "host": "EC2",
-      "ram": "205M",
-      "uptime": "02:14:59",
+      "ram": "204M",
+      "uptime": "02:19:58",
       "note": "Conway automaton, ERC-8004 #30013"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "36M",
-      "uptime": "02:01:52",
+      "uptime": "02:06:51",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -100,18 +100,18 @@
     }
   ],
   "health": {
-    "ec2_cpu": "28.6%",
-    "ec2_ram": "1383M / 1907M (73%)",
+    "ec2_cpu": "0.0%",
+    "ec2_ram": "1279M / 1907M (67%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
     "hostinger_reachable": true,
     "miner_status": "running",
     "miner_running": true,
-    "seller_watchdog": "[2026-03-22 21:45:01] Seller DOWN - restarting...",
+    "seller_watchdog": "[2026-03-22 21:45:01] Seller restart FAILED",
     "seller_watchdog_ok": true,
     "bastion_watchdog": "[2026-03-22 21:45:01] Bastion OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "5s"
+    "collect_duration": "4s"
   }
 }
