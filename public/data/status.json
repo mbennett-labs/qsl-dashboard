@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-22T22:20:05Z",
+  "timestamp": "2026-03-22T22:25:06Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -7,7 +7,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "57M",
-      "uptime": "13:05",
+      "uptime": "18:06",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -16,7 +16,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "206M",
-      "uptime": "02:49:59",
+      "uptime": "02:55:00",
       "note": "Conway automaton, ERC-8004 #30013"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "36M",
-      "uptime": "02:36:51",
+      "uptime": "02:41:52",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -100,8 +100,8 @@
     }
   ],
   "health": {
-    "ec2_cpu": "4.5%",
-    "ec2_ram": "1370M / 1907M (72%)",
+    "ec2_cpu": "0.0%",
+    "ec2_ram": "1388M / 1907M (73%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
