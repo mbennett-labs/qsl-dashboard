@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QSL Swarm Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --navy-light: #1B2838;
+    --navy-mid: #243447;
+    --cyan: #00B4D8;
+    --cyan-dim: #0090AB;
+    --green: #00E676;
+    --red: #FF5252;
+    --amber: #FFD740;
+    --text: #E0E6ED;
+    --text-dim: #8899A6;
+  }
+  body { background: var(--navy); color: var(--text); font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+  .card { background: var(--navy-light); border: 1px solid var(--navy-mid); border-radius: 12px; }
+  .card-header { border-bottom: 1px solid var(--navy-mid); }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .status-running { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .status-stopped { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .status-warning { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+  .status-unknown { background: var(--text-dim); }
+  .accent { color: var(--cyan); }
+  .accent-border { border-color: var(--cyan); }
+  .pulse { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .metric-value { font-size: 2rem; font-weight: 700; color: var(--cyan); }
+  .feed-item { border-left: 3px solid var(--navy-mid); padding-left: 12px; margin-bottom: 8px; }
+  .feed-item.high { border-left-color: var(--red); }
+  .feed-item.medium { border-left-color: var(--amber); }
+  .feed-item.low { border-left-color: var(--text-dim); }
+  .milestone { position: relative; padding-left: 24px; }
+  .milestone::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: var(--navy-mid); }
+  .milestone-dot { position: absolute; left: 0; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--cyan); border: 2px solid var(--navy-light); }
+  .milestone-dot.done { background: var(--green); }
+  .grid-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  a { color: var(--cyan); }
+  a:hover { text-decoration: underline; }
+  .last-update { color: var(--text-dim); font-size: 0.75rem; }
+  .skeleton { background: linear-gradient(90deg, var(--navy-mid) 25%, var(--navy-light) 50%, var(--navy-mid) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- HEADER -->
+<header class="py-6 px-8 flex items-center justify-between border-b border-gray-800">
+  <div class="flex items-center gap-4">
+    <div class="text-3xl font-bold tracking-tight">
+      <span class="accent">QSL</span> Swarm
+    </div>
+    <div class="text-sm text-gray-500 mt-1">Quantum Shield Labs — Agentic Economy</div>
+  </div>
+  <div class="text-right">
+    <div id="swarm-status" class="text-sm font-mono">
+      <span class="status-dot status-unknown"></span> Loading...
+    </div>
+    <div id="last-updated" class="last-update mt-1">—</div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+  <!-- CABINET — Agent Status Cards -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4 accent">Cabinet</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="cabinet-grid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- TREASURY -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4 accent">Treasury</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="treasury-grid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- INTELLIGENCE FEED -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4 accent">Intelligence Feed</h2>
+    <div class="card p-4">
+      <div id="intel-feed" class="space-y-2">
+        <div class="text-gray-500 text-sm">Loading feed...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SWARM ACTIVITY -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4 accent">Swarm Activity</h2>
+    <div class="card p-4">
+      <div id="activity-timeline" class="space-y-4">
+        <div class="text-gray-500 text-sm">Loading milestones...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYSTEM HEALTH -->
+  <section>
+    <h2 class="text-xl font-semibold mb-4 accent">System Health</h2>
+    <div class="grid-health" id="health-grid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="py-6 px-8 border-t border-gray-800 text-center text-gray-600 text-sm">
+  <div>QSL Swarm Dashboard &middot; Station Zero &middot; Ship then iterate</div>
+  <div class="mt-1">Auto-updates every 5 minutes &middot; Data from EC2 collector</div>
+</footer>
+
+<script>
+const STATUS_URL = '/data/status.json';
+const REFRESH_MS = 60_000; // refresh page data every 60s (file updates every 5min via cron)
+
+function statusDot(status) {
+  const map = { running: 'status-running', stopped: 'status-stopped', warning: 'status-warning', error: 'status-stopped' };
+  return `<span class="status-dot ${map[status] || 'status-unknown'}"></span>`;
+}
+
+function statusLabel(status) {
+  const colors = { running: 'text-green-400', stopped: 'text-red-400', warning: 'text-yellow-400', error: 'text-red-400' };
+  return `<span class="${colors[status] || 'text-gray-500'}">${(status || 'unknown').toUpperCase()}</span>`;
+}
+
+function renderCabinet(agents) {
+  const grid = document.getElementById('cabinet-grid');
+  if (!agents || agents.length === 0) {
+    grid.innerHTML = '<div class="text-gray-500">No agent data</div>';
+    return;
+  }
+  grid.innerHTML = agents.map(a => `
+    <div class="card p-4">
+      <div class="card-header pb-3 mb-3 flex items-center justify-between">
+        <div>
+          <div class="font-bold text-lg">${a.name || '?'}</div>
+          <div class="text-xs text-gray-500">${a.role || ''}</div>
+        </div>
+        ${statusDot(a.status)}
+      </div>
+      <div class="text-sm space-y-1">
+        <div class="flex justify-between"><span class="text-gray-500">Host</span><span class="font-mono text-xs">${a.host || '—'}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">RAM</span><span>${a.ram || '—'}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Uptime</span><span>${a.uptime || '—'}</span></div>
+        ${a.note ? `<div class="text-xs text-gray-500 mt-2 italic">${a.note}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTreasury(treasury) {
+  const grid = document.getElementById('treasury-grid');
+  if (!treasury) {
+    grid.innerHTML = '<div class="text-gray-500">No treasury data</div>';
+    return;
+  }
+  const cards = [
+    { label: 'Conway Credits', value: treasury.conway_credits || '—', sub: treasury.conway_tier || '' },
+    { label: 'CrawDaddy Wallet', value: treasury.crawdaddy_balance || '—', sub: treasury.crawdaddy_address ? treasury.crawdaddy_address.slice(0,10) + '...' : '' },
+    { label: 'Bastion Wallet', value: treasury.bastion_balance || '—', sub: treasury.bastion_address ? treasury.bastion_address.slice(0,10) + '...' : '' },
+  ];
+  grid.innerHTML = cards.map(c => `
+    <div class="card p-4 text-center">
+      <div class="text-gray-500 text-sm mb-1">${c.label}</div>
+      <div class="metric-value">${c.value}</div>
+      <div class="text-xs text-gray-600 mt-1 font-mono">${c.sub}</div>
+    </div>
+  `).join('');
+}
+
+function renderIntelFeed(feed) {
+  const el = document.getElementById('intel-feed');
+  if (!feed || feed.length === 0) {
+    el.innerHTML = '<div class="text-gray-500 text-sm">No intelligence items</div>';
+    return;
+  }
+  el.innerHTML = feed.slice(0, 15).map(item => `
+    <div class="feed-item ${item.priority || 'low'}">
+      <div class="text-sm font-medium">${item.title || 'Untitled'}</div>
+      <div class="text-xs text-gray-500 flex gap-3">
+        <span>${item.source || ''}</span>
+        <span>Score: ${item.score ?? '—'}</span>
+        <span>${item.date || ''}</span>
+        ${item.action ? `<span class="accent">${item.action}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderActivity(milestones) {
+  const el = document.getElementById('activity-timeline');
+  if (!milestones || milestones.length === 0) {
+    el.innerHTML = '<div class="text-gray-500 text-sm">No milestones</div>';
+    return;
+  }
+  el.innerHTML = milestones.slice(0, 10).map(m => `
+    <div class="milestone">
+      <div class="milestone-dot ${m.done ? 'done' : ''}"></div>
+      <div class="text-sm font-medium">${m.text || ''}</div>
+      <div class="text-xs text-gray-500">${m.date || ''}</div>
+    </div>
+  `).join('');
+}
+
+function renderHealth(health) {
+  const grid = document.getElementById('health-grid');
+  if (!health) {
+    grid.innerHTML = '<div class="text-gray-500">No health data</div>';
+    return;
+  }
+  const items = [
+    { label: 'EC2 CPU', value: health.ec2_cpu || '—', status: health.ec2_status || 'unknown' },
+    { label: 'EC2 RAM', value: health.ec2_ram || '—', status: health.ec2_status || 'unknown' },
+    { label: 'EC2 Disk', value: health.ec2_disk || '—', status: health.ec2_status || 'unknown' },
+    { label: 'Hostinger', value: health.hostinger_status || '—', status: health.hostinger_reachable ? 'running' : 'stopped' },
+    { label: 'Miner UID 57', value: health.miner_status || '—', status: health.miner_running ? 'running' : 'stopped' },
+    { label: 'Seller Watchdog', value: health.seller_watchdog || '—', status: health.seller_watchdog_ok ? 'running' : 'warning' },
+    { label: 'Bastion Watchdog', value: health.bastion_watchdog || '—', status: health.bastion_watchdog_ok ? 'running' : 'warning' },
+    { label: 'Last Collect', value: health.collect_duration || '—', status: 'running' },
+  ];
+  grid.innerHTML = items.map(i => `
+    <div class="card p-3">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-gray-500">${i.label}</span>
+        ${statusDot(i.status)}
+      </div>
+      <div class="font-mono text-sm">${i.value}</div>
+    </div>
+  `).join('');
+}
+
+function renderSwarmStatus(data) {
+  const el = document.getElementById('swarm-status');
+  const agents = data.cabinet || [];
+  const running = agents.filter(a => a.status === 'running').length;
+  const total = agents.length;
+  const allGood = running === total && total > 0;
+  const dot = allGood ? 'status-running' : (running > 0 ? 'status-warning' : 'status-stopped');
+  el.innerHTML = `<span class="status-dot ${dot}"></span> ${running}/${total} agents online`;
+}
+
+async function loadData() {
+  try {
+    const resp = await fetch(STATUS_URL + '?t=' + Date.now());
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+
+    renderSwarmStatus(data);
+    renderCabinet(data.cabinet);
+    renderTreasury(data.treasury);
+    renderIntelFeed(data.intel_feed);
+    renderActivity(data.milestones);
+    renderHealth(data.health);
+
+    const ts = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'unknown';
+    document.getElementById('last-updated').textContent = `Last updated: ${ts}`;
+  } catch (err) {
+    document.getElementById('swarm-status').innerHTML =
+      `<span class="status-dot status-stopped"></span> <span class="text-red-400">Offline</span>`;
+    document.getElementById('last-updated').textContent = `Error: ${err.message}`;
+  }
+}
+
+loadData();
+setInterval(loadData, REFRESH_MS);
+</script>
+
+</body>
+</html>
