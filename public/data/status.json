@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-22T21:55:06Z",
+  "timestamp": "2026-03-22T22:00:07Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -15,8 +15,8 @@
       "role": "CIO \u2014 Gen 2",
       "status": "running",
       "host": "EC2",
-      "ram": "205M",
-      "uptime": "02:24:59",
+      "ram": "206M",
+      "uptime": "02:30:00",
       "note": "Conway automaton, ERC-8004 #30013"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "36M",
-      "uptime": "02:11:52",
+      "uptime": "02:16:52",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -100,18 +100,18 @@
     }
   ],
   "health": {
-    "ec2_cpu": "86.7%",
-    "ec2_ram": "1327M / 1907M (70%)",
+    "ec2_cpu": "68.2%",
+    "ec2_ram": "1400M / 1907M (73%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
     "hostinger_reachable": true,
     "miner_status": "running",
     "miner_running": true,
-    "seller_watchdog": "[2026-03-22 21:45:01] Seller restart FAILED",
+    "seller_watchdog": "[2026-03-22 22:00:02] Seller DOWN - restarting...",
     "seller_watchdog_ok": true,
-    "bastion_watchdog": "[2026-03-22 21:45:01] Bastion OK",
+    "bastion_watchdog": "[2026-03-22 22:00:02] Bastion OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "4s"
+    "collect_duration": "5s"
   }
 }
