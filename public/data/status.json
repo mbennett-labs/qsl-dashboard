@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T08:45:06Z",
+  "timestamp": "2026-03-23T08:50:05Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -7,7 +7,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "48M",
-      "uptime": "10:38:06",
+      "uptime": "10:43:05",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -15,8 +15,8 @@
       "role": "CIO \u2014 Gen 2",
       "status": "running",
       "host": "EC2",
-      "ram": "181M",
-      "uptime": "13:14:59",
+      "ram": "182M",
+      "uptime": "13:19:59",
       "note": "Conway automaton, ERC-8004 #30013"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "20M",
-      "uptime": "13:01:52",
+      "uptime": "13:06:52",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -100,8 +100,8 @@
     }
   ],
   "health": {
-    "ec2_cpu": "4.8%",
-    "ec2_ram": "1291M / 1907M (68%)",
+    "ec2_cpu": "0.0%",
+    "ec2_ram": "1233M / 1907M (65%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
@@ -112,6 +112,6 @@
     "seller_watchdog_ok": true,
     "bastion_watchdog": "[2026-03-23 08:45:01] Bastion OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "5s"
+    "collect_duration": "4s"
   }
 }
