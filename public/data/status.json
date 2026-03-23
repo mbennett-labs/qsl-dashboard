@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-03-23T21:18:39Z",
+  "timestamp": "2026-03-23T21:20:05Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
       "role": "CSO \u2014 Gen 1",
       "status": "running",
       "host": "EC2",
-      "ram": "45M",
-      "uptime": "23:11:40",
+      "ram": "44M",
+      "uptime": "23:13:06",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "27M",
-      "uptime": "1-01:35:26",
+      "uptime": "1-01:36:52",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -205,8 +205,8 @@
     }
   ],
   "health": {
-    "ec2_cpu": "9.5%",
-    "ec2_ram": "1279M / 1907M (67%)",
+    "ec2_cpu": "0.0%",
+    "ec2_ram": "1334M / 1907M (70%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
@@ -217,6 +217,6 @@
     "seller_watchdog_ok": true,
     "bastion_watchdog": "[2026-03-23 21:15:01] Bastion OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "3s"
+    "collect_duration": "4s"
   }
 }
