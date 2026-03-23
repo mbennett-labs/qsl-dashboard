@@ -24,6 +24,7 @@
   .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
   .status-running { background: var(--green); box-shadow: 0 0 8px var(--green); }
   .status-stopped { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .status-disabled { background: var(--text-dim); box-shadow: 0 0 4px var(--text-dim); }
   .status-warning { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
   .status-unknown { background: var(--text-dim); }
   .accent { color: var(--cyan); }
@@ -124,12 +125,12 @@ const STATUS_URL = '/data/status.json';
 const REFRESH_MS = 60_000; // refresh page data every 60s (file updates every 5min via cron)
 
 function statusDot(status) {
-  const map = { running: 'status-running', stopped: 'status-stopped', warning: 'status-warning', error: 'status-stopped' };
+  const map = { running: 'status-running', stopped: 'status-stopped', disabled: 'status-disabled', warning: 'status-warning', error: 'status-stopped' };
   return `<span class="status-dot ${map[status] || 'status-unknown'}"></span>`;
 }
 
 function statusLabel(status) {
-  const colors = { running: 'text-green-400', stopped: 'text-red-400', warning: 'text-yellow-400', error: 'text-red-400' };
+  const colors = { running: 'text-green-400', stopped: 'text-red-400', disabled: 'text-gray-500', warning: 'text-yellow-400', error: 'text-red-400' };
   return `<span class="${colors[status] || 'text-gray-500'}">${(status || 'unknown').toUpperCase()}</span>`;
 }
 
@@ -178,23 +179,47 @@ function renderTreasury(treasury) {
   `).join('');
 }
 
-function renderIntelFeed(feed) {
+function renderIntelFeed(feed, intelligence) {
   const el = document.getElementById('intel-feed');
-  if (!feed || feed.length === 0) {
-    el.innerHTML = '<div class="text-gray-500 text-sm">No intelligence items</div>';
-    return;
-  }
-  el.innerHTML = feed.slice(0, 15).map(item => `
-    <div class="feed-item ${item.priority || 'low'}">
-      <div class="text-sm font-medium">${item.title || 'Untitled'}</div>
-      <div class="text-xs text-gray-500 flex gap-3">
-        <span>${item.source || ''}</span>
-        <span>Score: ${item.score ?? '—'}</span>
-        <span>${item.date || ''}</span>
-        ${item.action ? `<span class="accent">${item.action}</span>` : ''}
+  let html = '';
+
+  // Render digest summary if available
+  if (intelligence && intelligence.digest_date) {
+    const topItems = (intelligence.top_items || []);
+    html += `<div class="mb-4 p-3 rounded" style="background: var(--navy-mid);">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-bold accent">Daily Digest — ${intelligence.digest_date}</span>
+        <span class="text-xs text-gray-500">${intelligence.next_fetch || ''}</span>
       </div>
-    </div>
-  `).join('');
+      <div class="flex gap-4 text-sm mb-2">
+        <span><span class="text-red-400 font-bold">${intelligence.high_priority || 0}</span> high</span>
+        <span><span class="text-yellow-400 font-bold">${intelligence.medium_priority || 0}</span> medium</span>
+        <span><span class="text-gray-400">${intelligence.items_today || 0}</span> fetched</span>
+      </div>
+      ${topItems.length > 0 ? `<ul class="text-xs space-y-1">${topItems.map(t => `<li class="feed-item high text-sm">${t}</li>`).join('')}</ul>` : ''}
+    </div>`;
+  }
+
+  // Render DB feed items
+  if (feed && feed.length > 0) {
+    html += feed.slice(0, 15).map(item => `
+      <div class="feed-item ${item.priority || 'low'}">
+        <div class="text-sm font-medium">${item.title || 'Untitled'}</div>
+        <div class="text-xs text-gray-500 flex gap-3">
+          <span>${item.source || ''}</span>
+          <span>Score: ${item.score ?? '—'}</span>
+          <span>${item.date || ''}</span>
+          ${item.action ? `<span class="accent">${item.action}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  if (!html) {
+    html = '<div class="text-gray-500 text-sm">No intelligence items</div>';
+  }
+
+  el.innerHTML = html;
 }
 
 function renderActivity(milestones) {
@@ -258,7 +283,7 @@ async function loadData() {
     renderSwarmStatus(data);
     renderCabinet(data.cabinet);
     renderTreasury(data.treasury);
-    renderIntelFeed(data.intel_feed);
+    renderIntelFeed(data.intel_feed, data.intelligence);
     renderActivity(data.milestones);
     renderHealth(data.health);
 

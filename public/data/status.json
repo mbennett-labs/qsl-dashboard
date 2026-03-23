@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-03-23T20:45:07Z",
+  "timestamp": "2026-03-23T20:48:19Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
       "role": "CSO \u2014 Gen 1",
       "status": "running",
       "host": "EC2",
-      "ram": "46M",
-      "uptime": "22:38:06",
+      "ram": "45M",
+      "uptime": "22:41:21",
       "note": "ACP seller on Virtuals"
     },
     {
       "name": "Bastion",
       "role": "CIO \u2014 Gen 2",
-      "status": "stopped",
+      "status": "disabled",
       "host": "EC2",
       "ram": "\u2014",
       "uptime": "\u2014",
-      "note": "Conway automaton, ERC-8004 #30013"
+      "note": "Paused \u2014 pending ContentBot + revenue milestone"
     },
     {
       "name": "ResearchBot",
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "28M",
-      "uptime": "1-01:01:52",
+      "uptime": "1-01:05:07",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -39,14 +39,119 @@
     }
   ],
   "treasury": {
-    "conway_credits": "$6.04",
+    "conway_credits": "$6.01",
     "conway_tier": "low_compute",
     "crawdaddy_address": "0x25B50fEd69175e474F9702C0613413F8323809a8",
     "crawdaddy_balance": "\u2014",
     "bastion_address": "0xEEF60d4E36EdcfE75b07ffA8a492212660452DD4",
     "bastion_balance": "\u2014"
   },
-  "intel_feed": [],
+  "intel_feed": [
+    {
+      "title": "Post-Quantum Cryptography from Quantum Stabilizer Decoding",
+      "source": "arXiv Quantum Crypto",
+      "score": 55,
+      "date": "2026-03-19T16:35:31Z",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2023-24025: CRYSTALS-DILITHIUM (in Post-Quantum Cryptography Selected Algorithms 2022) in PQClean d03da30 may al",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2023-01-20T21:15:11.273",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2024-36405: liboqs is a C-language cryptographic library that provides implementations of post-quantum cryptogra",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2024-06-10T13:15:50.700",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2024-37305: oqs-provider is a provider for the OpenSSL 3 cryptography library that adds support for post-quantum",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2024-06-17T20:15:12.880",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2024-54137: liboqs is a C-language cryptographic library that provides implementations of post-quantum cryptogra",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2024-12-06T16:15:22.637",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2025-29779: Post-Quantum Secure Feldman's Verifiable Secret Sharing provides a Python implementation of Feldman'",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2025-03-14T18:15:32.330",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2025-29780: Post-Quantum Secure Feldman's Verifiable Secret Sharing provides a Python implementation of Feldman'",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2025-03-14T18:15:32.503",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2025-48946: liboqs is a C-language cryptographic library that provides implementations of post-quantum cryptogra",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2025-05-30T20:15:43.710",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2025-52473: liboqs is a C-language cryptographic library that provides implementations of post-quantum cryptogra",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2025-07-10T19:15:25.387",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2026-24785: Clatter is a no_std compatible, pure Rust implementation of the Noise protocol framework with post-q",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2026-01-28T00:15:50.623",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "CVE-2026-2673: Issue summary: An OpenSSL TLS 1.3 server may fail to negotiate the expected\npreferred key exchange g",
+      "source": "NVD PQC CVEs",
+      "score": 55,
+      "date": "2026-03-13T19:54:34.033",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    },
+    {
+      "title": "Quantum-Secure-By-Construction (QSC): A Paradigm Shift For Post-Quantum Agentic Intelligence",
+      "source": "arXiv Quantum Crypto",
+      "score": 40,
+      "date": "2026-03-12T17:38:02Z",
+      "action": "bastion:pqc_calibration",
+      "priority": "medium"
+    }
+  ],
+  "intelligence": {
+    "digest_date": "2026-03-23",
+    "items_today": 0,
+    "high_priority": 0,
+    "medium_priority": 0,
+    "top_items": [],
+    "next_fetch": "in 4h"
+  },
   "milestones": [
     {
       "text": "ERC-8004 Agent ID 30013 registered on Base",
@@ -100,8 +205,8 @@
     }
   ],
   "health": {
-    "ec2_cpu": "81.8%",
-    "ec2_ram": "1355M / 1907M (71%)",
+    "ec2_cpu": "4.5%",
+    "ec2_ram": "1168M / 1907M (61%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
@@ -110,8 +215,8 @@
     "miner_running": true,
     "seller_watchdog": "[2026-03-23 20:45:01] Seller OK",
     "seller_watchdog_ok": true,
-    "bastion_watchdog": "[2026-03-23 20:45:01] Bastion DOWN - restarting...",
+    "bastion_watchdog": "[2026-03-23 20:45:01] Bastion restarted OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "5s"
+    "collect_duration": "3s"
   }
 }

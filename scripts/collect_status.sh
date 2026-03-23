@@ -38,7 +38,7 @@ if [ "$BASTION_ACTIVE" = "active" ]; then
     BASTION_UPTIME="—"
   fi
 else
-  BASTION_STATUS="stopped"
+  BASTION_STATUS="disabled"
   BASTION_RAM="—"
   BASTION_UPTIME="—"
 fi
@@ -103,7 +103,7 @@ if [ -f "$HOME/.automaton/state.db" ]; then
   fi
 fi
 
-# --- INTEL FEED (latest ResearchBot items) ---
+# --- INTEL FEED (latest ResearchBot items from DB) ---
 INTEL_JSON="[]"
 RB_DB="$HOME/qsl-swarm/CABINET/researchbot/data/researchbot.db"
 if [ -f "$RB_DB" ]; then
@@ -111,9 +111,10 @@ if [ -f "$RB_DB" ]; then
 import sqlite3, json
 conn = sqlite3.connect('$RB_DB')
 rows = conn.execute('''
-  SELECT title, source, score, published, downstream_action
-  FROM items WHERE score >= 30
-  ORDER BY score DESC, published DESC LIMIT 15
+  SELECT i.title, s.name, i.relevance_score, i.published_at, i.downstream_action
+  FROM items i JOIN sources s ON i.source_id = s.id
+  WHERE i.relevance_score >= 30
+  ORDER BY i.relevance_score DESC, i.fetched_at DESC LIMIT 15
 ''').fetchall()
 items = []
 for r in rows:
@@ -128,6 +129,48 @@ for r in rows:
     })
 print(json.dumps(items))
 " 2>/dev/null || echo "[]")
+fi
+
+# --- INTELLIGENCE DIGEST (from ResearchBot daily markdown) ---
+INTEL_DIGEST_JSON="{}"
+DIGEST=$(ls -t "$HOME/qsl-swarm/CABINET/researchbot/output/"*.md 2>/dev/null | head -1)
+if [ -f "$DIGEST" ]; then
+  INTEL_DIGEST_JSON=$(python3 -c "
+import re, json, sys, os
+digest_path = '$DIGEST'
+digest_date = os.path.basename(digest_path).replace('.md', '')
+with open(digest_path) as f:
+    content = f.read()
+# Extract metrics
+items_today = 0
+high_count = 0
+medium_count = 0
+for line in content.splitlines():
+    m = re.match(r'- Items fetched today: (\d+)', line)
+    if m: items_today = int(m.group(1))
+    m = re.match(r'- High priority: (\d+)', line)
+    if m: high_count = int(m.group(1))
+    m = re.match(r'- Medium priority: (\d+)', line)
+    if m: medium_count = int(m.group(1))
+    m = re.match(r'## HIGH PRIORITY \((\d+) items?\)', line)
+    if m: high_count = max(high_count, int(m.group(1)))
+    m = re.match(r'## MEDIUM PRIORITY \((\d+) items?\)', line)
+    if m: medium_count = max(medium_count, int(m.group(1)))
+# Extract top headlines (bold lines under HIGH or MEDIUM sections)
+top_items = []
+for m in re.finditer(r'- \*\*(.+?)\*\*', content):
+    title = m.group(1).strip()
+    if title and len(top_items) < 3:
+        top_items.append(title[:120])
+print(json.dumps({
+    'digest_date': digest_date,
+    'items_today': items_today,
+    'high_priority': high_count,
+    'medium_priority': medium_count,
+    'top_items': top_items,
+    'next_fetch': 'in 4h'
+}))
+" 2>/dev/null || echo "{}")
 fi
 
 # --- MILESTONES ---
@@ -219,13 +262,15 @@ ENVEOF
 echo "SELLER_WD_MSG=$SELLER_WD_MSG" >> "$_ENVFILE"
 echo "BASTION_WD_MSG=$BASTION_WD_MSG" >> "$_ENVFILE"
 
-# Intel and milestones JSON passed via files
+# Intel, milestones, and digest JSON passed via files
 _INTEL_FILE=$(mktemp)
 _MILES_FILE=$(mktemp)
+_DIGEST_FILE=$(mktemp)
 echo "$INTEL_JSON" > "$_INTEL_FILE"
 echo "$MILESTONES_JSON" > "$_MILES_FILE"
+echo "$INTEL_DIGEST_JSON" > "$_DIGEST_FILE"
 
-python3 - "$_ENVFILE" "$_INTEL_FILE" "$_MILES_FILE" "$OUTPUT" <<'PYEOF'
+python3 - "$_ENVFILE" "$_INTEL_FILE" "$_MILES_FILE" "$OUTPUT" "$_DIGEST_FILE" <<'PYEOF'
 import json, sys
 
 def load_env(path):
@@ -244,6 +289,8 @@ with open(sys.argv[2]) as f:
     intel = json.loads(f.read().strip() or '[]')
 with open(sys.argv[3]) as f:
     milestones = json.loads(f.read().strip() or '[]')
+with open(sys.argv[5]) as f:
+    intel_digest = json.loads(f.read().strip() or '{}')
 
 def b(val):
     return val == 'true'
@@ -267,7 +314,7 @@ data = {
             'host': 'EC2',
             'ram': env.get('BASTION_RAM', '\u2014'),
             'uptime': env.get('BASTION_UPTIME', '\u2014'),
-            'note': 'Conway automaton, ERC-8004 #30013'
+            'note': 'Paused — pending ContentBot + revenue milestone'
         },
         {
             'name': 'ResearchBot',
@@ -297,6 +344,7 @@ data = {
         'bastion_balance': '\u2014'
     },
     'intel_feed': intel,
+    'intelligence': intel_digest,
     'milestones': milestones,
     'health': {
         'ec2_cpu': env.get('EC2_CPU', '\u2014'),
@@ -319,6 +367,6 @@ with open(sys.argv[4], 'w') as f:
     json.dump(data, f, indent=2)
 PYEOF
 
-rm -f "$_ENVFILE" "$_INTEL_FILE" "$_MILES_FILE"
+rm -f "$_ENVFILE" "$_INTEL_FILE" "$_MILES_FILE" "$_DIGEST_FILE"
 
 echo "[$(date)] Collected status → $OUTPUT ($COLLECT_DURATION)"
