@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T20:50:05Z",
+  "timestamp": "2026-03-23T20:55:05Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -7,7 +7,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "45M",
-      "uptime": "22:43:05",
+      "uptime": "22:48:05",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "28M",
-      "uptime": "1-01:06:51",
+      "uptime": "1-01:11:51",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -205,8 +205,8 @@
     }
   ],
   "health": {
-    "ec2_cpu": "4.8%",
-    "ec2_ram": "1173M / 1907M (62%)",
+    "ec2_cpu": "0.0%",
+    "ec2_ram": "1154M / 1907M (61%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
