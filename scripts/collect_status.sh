@@ -25,23 +25,10 @@ else
   SELLER_UPTIME="—"
 fi
 
-# Bastion
-BASTION_ACTIVE=$(systemctl is-active bastion.service 2>/dev/null || echo "inactive")
-if [ "$BASTION_ACTIVE" = "active" ]; then
-  BASTION_STATUS="running"
-  BASTION_PID=$(systemctl show bastion.service --property=MainPID --value 2>/dev/null || true)
-  if [ -n "$BASTION_PID" ] && [ "$BASTION_PID" != "0" ]; then
-    BASTION_RAM=$(ps -o rss= -p "$BASTION_PID" 2>/dev/null | awk '{printf "%.0fM", $1/1024}' || echo "—")
-    BASTION_UPTIME=$(ps -o etime= -p "$BASTION_PID" 2>/dev/null | xargs || echo "—")
-  else
-    BASTION_RAM="—"
-    BASTION_UPTIME="—"
-  fi
-else
-  BASTION_STATUS="disabled"
-  BASTION_RAM="—"
-  BASTION_UPTIME="—"
-fi
+# Bastion — intentionally disabled, pending ContentBot + revenue milestone
+BASTION_STATUS="disabled"
+BASTION_RAM="—"
+BASTION_UPTIME="—"
 
 # OpenClaw Gateway
 GW_PID=$(pgrep -f "openclaw" 2>/dev/null | head -1 || true)
