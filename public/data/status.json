@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T21:00:08Z",
+  "timestamp": "2026-03-23T21:05:05Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -7,16 +7,16 @@
       "status": "running",
       "host": "EC2",
       "ram": "45M",
-      "uptime": "22:53:07",
+      "uptime": "22:58:05",
       "note": "ACP seller on Virtuals"
     },
     {
       "name": "Bastion",
       "role": "CIO \u2014 Gen 2",
-      "status": "disabled",
+      "status": "running",
       "host": "EC2",
-      "ram": "\u2014",
-      "uptime": "\u2014",
+      "ram": "210M",
+      "uptime": "04:57",
       "note": "Paused \u2014 pending ContentBot + revenue milestone"
     },
     {
@@ -24,8 +24,8 @@
       "role": "CDO \u2014 Intelligence",
       "status": "running",
       "host": "EC2",
-      "ram": "28M",
-      "uptime": "1-01:16:54",
+      "ram": "27M",
+      "uptime": "1-01:21:51",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -39,7 +39,7 @@
     }
   ],
   "treasury": {
-    "conway_credits": "$6.01",
+    "conway_credits": "$5.99",
     "conway_tier": "low_compute",
     "crawdaddy_address": "0x25B50fEd69175e474F9702C0613413F8323809a8",
     "crawdaddy_balance": "\u2014",
@@ -206,7 +206,7 @@
   ],
   "health": {
     "ec2_cpu": "0.0%",
-    "ec2_ram": "1293M / 1907M (68%)",
+    "ec2_ram": "1055M / 1907M (55%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
@@ -215,8 +215,8 @@
     "miner_running": true,
     "seller_watchdog": "[2026-03-23 21:00:02] Seller OK",
     "seller_watchdog_ok": true,
-    "bastion_watchdog": "[2026-03-23 21:00:02] Bastion DOWN - restarting...",
+    "bastion_watchdog": "[2026-03-23 21:00:02] Bastion restarted OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "6s"
+    "collect_duration": "4s"
   }
 }
