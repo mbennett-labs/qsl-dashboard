@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T21:40:06Z",
+  "timestamp": "2026-03-23T21:45:06Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -7,7 +7,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "44M",
-      "uptime": "23:33:06",
+      "uptime": "23:38:06",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -25,7 +25,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "27M",
-      "uptime": "1-01:56:52",
+      "uptime": "1-02:01:52",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -205,18 +205,18 @@
     }
   ],
   "health": {
-    "ec2_cpu": "0.0%",
-    "ec2_ram": "1325M / 1907M (69%)",
+    "ec2_cpu": "4.8%",
+    "ec2_ram": "1362M / 1907M (71%)",
     "ec2_disk": "12G / 19G (65%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
     "hostinger_reachable": true,
     "miner_status": "running",
     "miner_running": true,
-    "seller_watchdog": "[2026-03-23 21:30:01] Seller OK",
+    "seller_watchdog": "[2026-03-23 21:45:01] Seller OK",
     "seller_watchdog_ok": true,
-    "bastion_watchdog": "[2026-03-23 21:30:01] Bastion OK",
+    "bastion_watchdog": "[2026-03-23 21:45:02] Bastion OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "5s"
+    "collect_duration": "4s"
   }
 }
