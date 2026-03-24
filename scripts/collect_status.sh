@@ -100,12 +100,12 @@ conn = sqlite3.connect('$RB_DB')
 rows = conn.execute('''
   SELECT i.title, s.name, i.relevance_score, i.published_at, i.downstream_action
   FROM items i JOIN sources s ON i.source_id = s.id
-  WHERE i.relevance_score >= 30
+  WHERE i.relevance_score >= 25
   ORDER BY i.relevance_score DESC, i.fetched_at DESC LIMIT 15
 ''').fetchall()
 items = []
 for r in rows:
-    priority = 'high' if (r[2] or 0) >= 60 else 'medium'
+    priority = 'high' if (r[2] or 0) >= 45 else 'medium'
     items.append({
         'title': r[0] or '',
         'source': r[1] or '',
