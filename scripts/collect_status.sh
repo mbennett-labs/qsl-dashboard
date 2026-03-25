@@ -90,6 +90,40 @@ if [ -f "$HOME/.automaton/state.db" ]; then
   fi
 fi
 
+# CrawDaddy wallet — USDC balance on Base via RPC (no API key needed)
+# USDC contract: 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+# CrawDaddy address: 0x25B50fEd69175e474F9702C0613413F8323809a8
+CRAWDADDY_BALANCE="—"
+CRAWDADDY_RESP=$(curl -sf --max-time 10 -X POST "https://mainnet.base.org" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913","data":"0x70a0823100000000000000000000000025B50fEd69175e474F9702C0613413F8323809a8"},"latest"],"id":1}' 2>/dev/null || echo "")
+if [ -n "$CRAWDADDY_RESP" ]; then
+  CRAWDADDY_BALANCE=$(echo "$CRAWDADDY_RESP" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+r=d.get('result','0x0')
+balance=int(r,16)/1e6
+print(f'\${balance:.2f}')
+" 2>/dev/null || echo "—")
+fi
+
+# Bastion wallet — ETH balance on Base via RPC
+# Bastion address: 0xEEF60d4E36EdcfE75b07ffA8a492212660452DD4
+BASTION_BALANCE="—"
+BASTION_RESP=$(curl -sf --max-time 10 -X POST "https://mainnet.base.org" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xEEF60d4E36EdcfE75b07ffA8a492212660452DD4","latest"],"id":1}' 2>/dev/null || echo "")
+if [ -n "$BASTION_RESP" ]; then
+  BASTION_BALANCE=$(echo "$BASTION_RESP" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+r=d.get('result','0x0')
+eth=int(r,16)/1e18
+if eth > 0.001: print(f'{eth:.4f} ETH')
+else: print('0 ETH')
+" 2>/dev/null || echo "—")
+fi
+
 # --- INTEL FEED (latest ResearchBot items from DB) ---
 INTEL_JSON="[]"
 RB_DB="$HOME/qsl-swarm/CABINET/researchbot/data/researchbot.db"
@@ -235,6 +269,8 @@ MINER_RAM=$MINER_RAM
 MINER_RUNNING=$MINER_RUNNING
 CONWAY_CREDITS=$CONWAY_CREDITS
 CONWAY_TIER=$CONWAY_TIER
+CRAWDADDY_BALANCE=$CRAWDADDY_BALANCE
+BASTION_BALANCE=$BASTION_BALANCE
 EC2_CPU=$EC2_CPU
 EC2_RAM=$EC2_RAM_INFO
 EC2_DISK=$EC2_DISK
@@ -326,9 +362,9 @@ data = {
         'conway_credits': env.get('CONWAY_CREDITS', '\u2014'),
         'conway_tier': env.get('CONWAY_TIER', '\u2014'),
         'crawdaddy_address': '0x25B50fEd69175e474F9702C0613413F8323809a8',
-        'crawdaddy_balance': '\u2014',
+        'crawdaddy_balance': env.get('CRAWDADDY_BALANCE', '\u2014'),
         'bastion_address': '0xEEF60d4E36EdcfE75b07ffA8a492212660452DD4',
-        'bastion_balance': '\u2014'
+        'bastion_balance': env.get('BASTION_BALANCE', '\u2014')
     },
     'intel_feed': intel,
     'intelligence': intel_digest,

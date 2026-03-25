@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T15:09:11Z",
+  "timestamp": "2026-03-25T19:16:29Z",
   "cabinet": [
     {
       "name": "CrawDaddy",
@@ -7,7 +7,7 @@
       "status": "running",
       "host": "EC2",
       "ram": "57M",
-      "uptime": "04:15",
+      "uptime": "16:11",
       "note": "ACP seller on Virtuals"
     },
     {
@@ -24,8 +24,8 @@
       "role": "CDO \u2014 Intelligence",
       "status": "running",
       "host": "EC2",
-      "ram": "24M",
-      "uptime": "1-19:25:58",
+      "ram": "23M",
+      "uptime": "2-23:33:16",
       "note": "Feed aggregation + daily digest"
     },
     {
@@ -33,7 +33,7 @@
       "role": "Revenue \u2014 BitTensor",
       "status": "running",
       "host": "Hostinger",
-      "ram": "1.93MiB",
+      "ram": "168.7MiB",
       "uptime": "\u2014",
       "note": "UID 57 Finney mainnet"
     }
@@ -42,9 +42,9 @@
     "conway_credits": "$4.03",
     "conway_tier": "low_compute",
     "crawdaddy_address": "0x25B50fEd69175e474F9702C0613413F8323809a8",
-    "crawdaddy_balance": "\u2014",
+    "crawdaddy_balance": "$26.18",
     "bastion_address": "0xEEF60d4E36EdcfE75b07ffA8a492212660452DD4",
-    "bastion_balance": "\u2014"
+    "bastion_balance": "0.0050 ETH"
   },
   "intel_feed": [
     {
@@ -142,11 +142,19 @@
       "date": "2026-03-12T17:38:02Z",
       "action": "bastion:pqc_calibration",
       "priority": "medium"
+    },
+    {
+      "title": "The Kill Chain Is Obsolete When Your AI Agent Is the Threat",
+      "source": "The Hacker News",
+      "score": 30,
+      "date": "Wed, 25 Mar 2026 17:28:00 +0530",
+      "action": "",
+      "priority": "medium"
     }
   ],
   "intelligence": {
-    "digest_date": "2026-03-24",
-    "items_today": 13,
+    "digest_date": "2026-03-25",
+    "items_today": 4,
     "high_priority": 0,
     "medium_priority": 0,
     "top_items": [],
@@ -205,18 +213,18 @@
     }
   ],
   "health": {
-    "ec2_cpu": "4.5%",
-    "ec2_ram": "1242M / 1907M (65%)",
-    "ec2_disk": "12G / 19G (66%)",
+    "ec2_cpu": "9.5%",
+    "ec2_ram": "1378M / 1907M (72%)",
+    "ec2_disk": "14G / 19G (73%)",
     "ec2_status": "running",
     "hostinger_status": "reachable",
     "hostinger_reachable": true,
     "miner_status": "running",
     "miner_running": true,
-    "seller_watchdog": "[2026-03-23 23:15:01] Seller OK",
+    "seller_watchdog": "[2026-03-25 19:15:01] Seller OK",
     "seller_watchdog_ok": true,
     "bastion_watchdog": "[2026-03-23 23:15:01] Bastion OK",
     "bastion_watchdog_ok": true,
-    "collect_duration": "3s"
+    "collect_duration": "4s"
   }
 }
